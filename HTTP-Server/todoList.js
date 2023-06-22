@@ -43,26 +43,30 @@ const port = 3001;
 var list = [];
 
 //endpoint 1
-app.get('/todos/', (req, res) => {
+const getTodo = (req, res) => {
   if (list.length !== 0) {
     res.status(200).send(list);
   } else {
     res.status(404).send('List is Empty');
   }
-});
+}
+
+app.get('/todos/', getTodo);
 
 //endpoint2
-app.get('/todos/:id', (req, res) => {
+const getID = (req, res) => {
   const todo = list.find(t => t.id === parseInt(req.params.id));;
   if (todo) {
     res.status(200).send(todo);
   } else {
     res.status(404).send('id not found');
   }
-});
+}
+
+app.get('/todos/:id', getID);
 
 //endpoint3
-app.post('/todos/', (req, res) => {
+const addTodo = (req, res) => {
   const todo = {
     id: Math.floor(Math.random() * 1000000), // unique random id
     title: req.body.title,
@@ -71,23 +75,26 @@ app.post('/todos/', (req, res) => {
   };
   list.push(todo);
   res.status(201).send(`todo${list.length} is added to list`);
-});
+}
+
+app.post('/todos/', addTodo);
 
 //endpoint4
-app.put('/todos/:id', (req, res) => {
-  const id = list.findIndex(t => t.id === parseInt(req.params.id));
-  if (id !== -1) {
-    list[id].title = req.body.title;
-    list[id].completed = req.body.completed;
-    list[id].description = req.body.description;
-    res.status(200).send(list[id]);
-  } else {
-    res.status(404).send('id not found');
-  }
-});
+const updateID = (req, res) => {
+  const todo = {
+    id: Math.floor(Math.random() * 1000000), // unique random id
+    title: req.body.title,
+    completed: req.body.completed,
+    description: req.body.description
+  };
+  list.push(todo);
+  res.status(201).send(`todo${list.length} is added to list`);
+}
+
+app.put('/todos/:id', updateID);
 
 //endpoint5
-app.delete('/todos/:id', (req, res) => {
+const deleteID = (req, res) => {
   const id = list.findIndex(t => t.id === parseInt(req.params.id));
   if (id !== -1) {
     list.splice(id, 1);
@@ -95,7 +102,9 @@ app.delete('/todos/:id', (req, res) => {
   } else {
     res.status(404).send('id not found');
   }
-});
+}
+
+app.delete('/todos/:id', deleteID);
 
 app.use('/', (req,res) => {
   res.status(404).send('route not defined');
