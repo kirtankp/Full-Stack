@@ -107,9 +107,10 @@ const deleteID = (req, res) => {
 
 app.delete('/todos/:id', deleteID);
 
-app.use('/', (req,res) => {
-  res.status(404).send('route not defined');
-});
+const otherRoute = (req, res, next) => {
+  res.status(404).send('Route not found');
+}
+app.use(otherRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
