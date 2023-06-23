@@ -57,7 +57,7 @@ app.get('/todos/', getTodo);
 const getID = (req, res) => {
   const todo = list.find(t => t.id === parseInt(req.params.id));;
   if (todo) {
-    res.status(200).send(todo);
+    res.status(200).json(todo);
   } else {
     res.status(404).send('id not found');
   }
@@ -74,21 +74,22 @@ const addTodo = (req, res) => {
     description: req.body.description
   };
   list.push(todo);
-  res.status(201).send(`todo${list.length} is added to list`);
+  res.status(201).json(todo);
 }
 
 app.post('/todos/', addTodo);
 
 //endpoint4
 const updateID = (req, res) => {
-  const todo = {
-    id: Math.floor(Math.random() * 1000000), // unique random id
-    title: req.body.title,
-    completed: req.body.completed,
-    description: req.body.description
-  };
-  list.push(todo);
-  res.status(201).send(`todo${list.length} is added to list`);
+  const id = list.findIndex(t => t.id === parseInt(req.params.id));
+  if (id !== -1) {
+    list[id].title = req.body.title;
+    list[id].completed = req.body.completed;
+    list[id].description = req.body.description;
+    res.status(200).send('todo updated');
+  } else {
+    res.status(404).send('id not found');
+  }
 }
 
 app.put('/todos/:id', updateID);
