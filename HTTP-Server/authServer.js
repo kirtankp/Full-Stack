@@ -66,7 +66,8 @@ const Login = (req, res) => {
             email: userFound.email
         });
     } else {
-        res.Status(401).send('unauthorized user');
+        res.sendStatus(401);
+        // res.Status(401).send('unauthorized user');
     }
 }
 app.post('/login', Login);
@@ -95,7 +96,8 @@ const FetchAllData = (req, res) => {
             users
         });
     } else {
-        res.Status(401).send('unauthorized user');
+        res.sendStatus(401);
+        // res.Status(401).send('unauthorized user');
     }
 }
 app.get('/data', FetchAllData);
