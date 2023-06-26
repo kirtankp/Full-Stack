@@ -42,11 +42,16 @@ app.use(bodyParser.json());
 const fs = require("fs");
 const port = 3005;
 
-var ctr = 0;
+function findIndex(arr, id) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].id === id) return i;
+    }
+    return -1;
+}
 
 //endpoint 1
 app.get('/todos/', (req, res) => {
-    fs.readFile('./todo.json', 'utf-8', (error, data) => {
+    fs.readFile('./todos.json', 'utf-8', (error, data) => {
         if (error) {
             res.status(404).send('file not found');
         } else {
@@ -57,43 +62,74 @@ app.get('/todos/', (req, res) => {
 
 //endpoint2
 app.get('/todos/:id', (req, res) => {
-    const todo = list.find(t => t.id === parseInt(req.params.id));;
-    if (todo) {
-        res.status(200).json(todo);
-    } else {
-        res.status(404).send('id not found');
-    }
+    fs.readFile("./todos.json", "utf8", (error, data) => {
+        if (error) {
+            res.status(404).send('file not found');
+        } else {
+            const todos = JSON.parse(data);
+            const todoIndex = findIndex(todos, parseInt(req.params.id));
+            if (todoIndex === -1) {
+                res.status(404).send();
+            } else {
+                res.json(todos[todoIndex]);
+            }
+        }
+    });
 });
 
 //endpoint3
 app.post('/todos/', (req, res) => {
     const todo = {
-        id: ctr,
+        id: Math.floor(Math.random() * 1000000), // unique random id
         title: req.body.title,
         completed: req.body.completed,
         description: req.body.description
     };
-    ctr++;
-    fs.writeFile("./todo.json", todo.toString(), "utf8", (error) => {
+    fs.readFile("./todos.json", "utf8", (error, data) => {
         if (error) {
-            console.error("Error writing file:", error);
-            return;
+            res.status(404).send('file not found');
+        } else {
+            const todos = JSON.parse(data);
+            todos.push(todo);
+            fs.writeFile("./todos.json", JSON.stringify(todos), (error) => {
+                if (error) {
+                    res.status(404).send('file not found');
+                } else {
+                    res.status(201).json(todo);
+                }
+            });
         }
-        res.status(201).json(todo);
     });
 });
 
 //endpoint4
 app.put('/todos/:id', (req, res) => {
-    const id = list.findIndex(t => t.id === parseInt(req.params.id));
-    if (id !== -1) {
-        list[id].title = req.body.title;
-        list[id].completed = req.body.completed;
-        list[id].description = req.body.description;
-        res.status(200).send('todo updated');
-    } else {
-        res.status(404).send('id not found');
-    }
+    fs.readFile("./todos.json", "utf8", (error, data) => {
+        if (error) {
+            res.status(404).send('file not found');
+        } else {
+            const todos = JSON.parse(data);
+            const todoIndex = findIndex(todos, parseInt(req.params.id));
+            if (todoIndex === -1) {
+                res.status(404).send();
+            } else {
+                const updatedTodo = {
+                    id: todos[todoIndex].id,
+                    title: req.body.title,
+                    completed: req.body.completed,
+                    description: req.body.description
+                };
+                todos[todoIndex] = updatedTodo;
+                fs.writeFile("./todos.json", JSON.stringify(todos), (error) => {
+                    if (error) {
+                        throw err;
+                    } else {
+                        res.status(200).json(updatedTodo);
+                    }
+                });
+            }
+        }
+    });
 });
 
 //endpoint5
