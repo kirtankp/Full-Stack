@@ -2,6 +2,10 @@
 This is repository for learning Full Stack from Scratch.
 
 ## Content
-Basics of JavaScript\
-HTTP Server\
-Backend-Apps
+1. Basics of JavaScript\
+2. HTTP Server\
+3. Backend-Apps\
+4. Authentication
+- Simple Auth (Password Based Authentication).
+- Token Based Authentication\
+5. DataBase
