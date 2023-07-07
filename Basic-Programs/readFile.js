@@ -1,15 +1,5 @@
-const fs = require("fs");
-
-fs.readFile("./file.txt", "utf8", (err, data) => {
-  if (err) {
-    console.error("Error reading file: ", err);
-    return;
-  }
-
-  console.log("File contents:", data);
-});
-
-//heavy task
-for (let i = 0; i < 1000000000; i++) {
-//   console.log(i);
-}
+/* undertand the sync and async nature of js 
+   
+   read the file.txt using fs module and also try to put some heavy task function 
+   to understand the sync and async nature of js.
+*/
