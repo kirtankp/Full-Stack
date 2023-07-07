@@ -15,7 +15,7 @@ Times\
 Expenditure Analysis\
 Write File\
 Read File\
-File Cleaner\
+File Cleaner
 
 ### Solution is there in solution directory
 
