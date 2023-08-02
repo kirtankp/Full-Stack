@@ -6,4 +6,5 @@ Basics of JavaScript\
 HTTP Server\
 Backend-Apps\
 Authentication\
-DataBase
+DataBase\
+Frontend(React + Vite)
